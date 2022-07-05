@@ -9,32 +9,84 @@
     android:layout_margin="7dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_width="200dp"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/imgBook"
-            android:layout_width="100dp"
-            android:layout_height="120dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Book Name"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imgBook"
-            android:id="@+id/txtName"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:layout_marginHorizontal="7dp"
-            android:layout_marginVertical="14dp"
-            />
+            android:id="@+id/collapsedCard"
+            >
+
+            <ImageView
+                android:id="@+id/imgBook"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:src="@mipmap/ic_launcher"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Book Name"
+                android:layout_below="@+id/imgBook"
+                android:id="@+id/txtBookName"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginHorizontal="7dp"
+                android:layout_marginVertical="14dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_down_arrow"
+                android:layout_below="@id/imgBook"
+                android:layout_marginVertical="16dp"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/downArrow"
+                android:layout_marginEnd="10dp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/expandedCard"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:layout_below="@id/collapsedCard"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Author"
+                android:layout_marginHorizontal="7dp"
+                android:id="@+id/txtBookAuthor"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtDescription"
+                android:layout_below="@id/txtBookAuthor"
+                android:layout_marginTop="7dp"
+                android:text="Descriptions"
+                android:layout_marginHorizontal="7dp"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/upArrow"
+                android:src="@drawable/ic_up_arrow"
+                android:layout_below="@id/txtDescription"
+                android:layout_alignParentEnd="true"
+                android:layout_marginHorizontal="10dp"/>
+
+        </RelativeLayout>
+
+
     </RelativeLayout>
+
 
 
 
