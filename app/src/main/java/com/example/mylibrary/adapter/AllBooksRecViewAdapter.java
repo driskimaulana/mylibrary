@@ -22,6 +22,8 @@ import com.example.mylibrary.model.Book;
 
 import java.util.ArrayList;
 
+import static com.example.mylibrary.BookActivity.BOOK_ID_KEY;
+
 public class AllBooksRecViewAdapter extends RecyclerView.Adapter<AllBooksRecViewAdapter.ViewHolder> {
 
 //    arraylist for books data
@@ -67,6 +69,8 @@ public class AllBooksRecViewAdapter extends RecyclerView.Adapter<AllBooksRecView
 //                Toast.makeText(mContext, books.get(position).getName() + " Clicked", Toast.LENGTH_SHORT).show();
 //                navigate to book details page
                 Intent intent = new Intent(mContext, BookActivity.class);
+//                send data to another activity
+                intent.putExtra(BOOK_ID_KEY, books.get(position).getId());
                 mContext.startActivity(intent);
             }
         });

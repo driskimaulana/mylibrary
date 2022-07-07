@@ -2,35 +2,209 @@ package com.example.mylibrary;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.util.Util;
 import com.example.mylibrary.model.Book;
 
+import java.util.ArrayList;
+
 public class BookActivity extends AppCompatActivity {
+
+    public static final String BOOK_ID_KEY = "bookId";
 
 //    class attribute
     private TextView txtName, txtAuthor, txtPages, txtShortDesc, txtLongDesc;
     private ImageView imgCurrentBook;
+    private Button btnCurrently, btnAlready, btnFav, btnWish;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
 
-        Book book = new Book(2, "Life of Pi", "Yann Martel", 460, "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1631251689l/4214._SY475_.jpg"
-                , "Life of Pi is a fantasy adventure novel by Yann Martel", "Life of Pi is a fantasy adventure novel by Yann Martel published in 2001. The protagonist, Piscine Molitor \"Pi\" Patel, a Tamil boy from Pondicherry, explores issues of spirituality and practicality from an early age. He survives 227 days after a shipwreck while stranded on a boat in the Pacific Ocean with a Bengal tiger named Richard Parker. \n" +
-                "Yann Martel is the author of Life of Pi, the #1 international bestseller and winner of the 2002 Man Booker (among many other prizes). He is also the award-winning author of The Facts Behind the Helsinki Roccamatios (winner of the Journey Prize), Self, Beatrice & Virgil, and 101 Letters to a Prime Minister. Born in Spain in 1963, Martel studied philosophy at Trent University, worked at odd jobs—tree planter, dishwasher, security guard—and traveled widely before turning to writing. He lives in Saskatoon, Canada, with the writer Alice Kuipers and their four children.\n"+
-                "It is not so much that The Life of Pi, is particularly moving (although it is). It isn’t even so much that it is written with language that is both delicate and sturdy all at once (which it is, as well). And it’s certainly not that Yann Martel’s vision filled passages are so precise that you begin to feel the salt water on your skin (even though they are). It is that, like Bohjalian and Byatt and all of the great Houdini’s of the literary world, in the last few moments of your journey – after you’ve felt the emotions, endured the moments of heartache, yearned for the resolution of the characters’ struggle – that you realize the book is not what you thought it was. The story transforms, instantly, and forever.\n" +
-                "\n" +
-                "And in those last few chapters, you suddenly realize that the moral has changed as well.");
-
 //        initialize ui
         initView();
 
-        setData(book);
+//        get intent that use to navigate to THIS activity in order to get data from
+//        previous activity
+        Intent intent = getIntent();
+
+        if(null != intent)
+        {
+            int bookId = intent.getIntExtra(BOOK_ID_KEY, -1);
+            if(bookId != -1){
+//                thereis book id in this navigation
+                Book book = Utils.getInstance().getBookById(bookId);
+                if(book != null)
+                {
+                    setData(book);
+                    manageAlreadyReadBookButton(book);
+                    manageCurrentlyReadingBookButton(book);
+                    manageWantToReadBookButton(book);
+                    manageAddToFavoriteBookButton(book);
+                }
+            }
+        }
+
+    }
+
+    /**
+     * manage add to favorite button
+     * disable button if book already in the list
+     * add book to favorite book list
+     * navigate user to favorite book activity
+     * @param book
+     */
+    private void manageAddToFavoriteBookButton(Book book) {
+
+        ArrayList<Book> favoriteBooks = Utils.getInstance().getFavoriteBooks();
+
+        boolean isExist = false;
+        for(Book b: favoriteBooks)
+        {
+            if(b.getId() == book.getId()) isExist = true;
+        }
+
+        if(isExist)
+        {
+            btnFav.setEnabled(false);
+        }else {
+            btnFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(Utils.getInstance().addFavoriteBook(book))
+                    {
+                        Toast.makeText(BookActivity.this, "Book successfully added to favorite list!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, FavoriteBooksActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(BookActivity.this, "Failed to add book. Try again later!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+    }
+
+    /**
+     * manage want to read button
+     * Add book to want to read list
+     * Disable button if book already in list
+     * Navigate to WatToReadActivity
+     * @param book
+     */
+    private void manageWantToReadBookButton(Book book) {
+
+        ArrayList<Book> wantToReadBooks = Utils.getInstance().getWantToReadBooks();
+
+        boolean isExist = false;
+        for (Book b: wantToReadBooks) {
+            if(b.getId() == book.getId()) isExist = true;
+        }
+
+        if(isExist)
+        {
+            btnWish.setEnabled(false);
+        }
+        else{
+            btnWish.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(Utils.getInstance().addWantToReadBook(book))
+                    {
+                        Toast.makeText(BookActivity.this, "Book successfully added to Want To Read list!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, WantToReadBooksActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(BookActivity.this, "Failed to add book. Try again later!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+    }
+
+    /**
+     * Manage currently reading button
+     * Disable button if the book is already in the list
+     * Add book to currently read book list
+     * navigate to currently reading book activity
+     * @param book
+     */
+    private void manageCurrentlyReadingBookButton(Book book) {
+        ArrayList<Book> currentlyReadingBooks = Utils.getInstance().getCurrentlyReadingBooks();
+
+        boolean isExist = false;
+
+        for (Book b: currentlyReadingBooks) {
+            if(b.getId() == book.getId()) isExist = true;
+        }
+
+        if(isExist == true)
+        {
+            btnCurrently.setEnabled(false);
+        }else {
+            btnCurrently.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(Utils.getInstance().addCurrentlyReadingBook(book))
+                    {
+                        Toast.makeText(BookActivity.this, "Book Successfully added to Currently Reading lists!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, CurrentlyReadingBooksActivity.class);
+
+                        startActivity(intent);
+                    }
+                    else {
+                        Toast.makeText(BookActivity.this, "Failed to add book. Try again later!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+    }
+
+    /**
+     * Manage Already read button
+     * Disable button if the book is already in the list
+     * Add book to Already read book data lists
+     * @param book
+     */
+    private void manageAlreadyReadBookButton(Book book) {
+
+        ArrayList<Book> alreadyReadBooks = Utils.getInstance().getAlreadyReadBooks();
+
+        boolean isExist = false;
+        for (Book b: alreadyReadBooks) {
+            if (b.getId() == book.getId()) isExist = true;
+        }
+
+//        disable button if book already exist in alreadyReadBooks data
+        if(isExist == true)
+        {
+            btnAlready.setEnabled(false);
+        }else {
+            btnAlready.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(Utils.getInstance().addAlreadyReadBook(book))
+                    {
+                        Toast.makeText(BookActivity.this, "Book successfully added to Alread Read", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(BookActivity.this, AlreadyReadBooksActivity.class);
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(BookActivity.this, "Failed to add book, try again later!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
     }
 
     public void initView()
@@ -42,6 +216,11 @@ public class BookActivity extends AppCompatActivity {
         txtShortDesc = findViewById(R.id.txtBookShortDesc);
 
         imgCurrentBook = findViewById(R.id.imgCurrentBook);
+
+        btnAlready = findViewById(R.id.btnAlready);
+        btnWish = findViewById(R.id.btnWish);
+        btnFav = findViewById(R.id.btnFav);
+        btnCurrently = findViewById(R.id.btnCurrently);
     }
 
     public void setData(Book book)
@@ -56,5 +235,27 @@ public class BookActivity extends AppCompatActivity {
                 .asBitmap()
                 .load(book.getImageUrl())
                 .into(imgCurrentBook);
+    }
+
+    public void addToAlreadyRead()
+    {
+
+    }
+
+    public void addToFavourites()
+    {
+
+    }
+
+    public void addToWishlist()
+    {
+
+    }
+
+    public void addToCurrentlyRead()
+    {
+
+
+        
     }
 }

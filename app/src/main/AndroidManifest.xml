@@ -11,7 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyLibrary">
-        <activity android:name=".BookActivity"></activity>
+        <activity android:name=".FavoriteBooksActivity"></activity>
+        <activity android:name=".WantToReadBooksActivity" />
+        <activity android:name=".CurrentlyReadingBooksActivity" />
+        <activity android:name=".AlreadyReadBooksActivity" />
+        <activity android:name=".BookActivity" />
         <activity android:name=".AllBooksActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
