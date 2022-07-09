@@ -25,9 +25,9 @@ public class AllBooksActivity extends AppCompatActivity {
 
         initView();
 
-        adapter = new AllBooksRecViewAdapter(this);
+        adapter = new AllBooksRecViewAdapter(this, "allBooks");
 
-        adapter.setBooks(Utils.getInstance().getAllBooks());
+        adapter.setBooks(Utils.getInstance(this).getAllBooks());
 
         recViewAllBooks.setAdapter(adapter);
 

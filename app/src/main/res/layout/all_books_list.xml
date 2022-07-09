@@ -73,6 +73,18 @@
                 android:text="Descriptions"
                 android:layout_marginHorizontal="7dp"
                 />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                android:layout_below="@id/txtDescription"
+                android:layout_toStartOf="@+id/upArrow"
+                android:textColor="@color/red"
+                android:id="@+id/txtDelete"
+                android:visibility="gone"/>
+
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

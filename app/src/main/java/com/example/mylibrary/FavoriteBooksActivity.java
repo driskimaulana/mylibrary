@@ -22,9 +22,9 @@ public class FavoriteBooksActivity extends AppCompatActivity {
 
         recViewFavorite = findViewById(R.id.recViewFavorite);
 
-        adapter = new AllBooksRecViewAdapter(this);
+        adapter = new AllBooksRecViewAdapter(this, "favoriteBooks");
 
-        adapter.setBooks(Utils.getInstance().getFavoriteBooks());
+        adapter.setBooks(Utils.getInstance(this).getFavoriteBooks());
 
         recViewFavorite.setAdapter(adapter);
         recViewFavorite.setLayoutManager(new LinearLayoutManager(this));

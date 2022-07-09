@@ -1,15 +1,18 @@
 package com.example.mylibrary;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnSeeAll, btnAlreadyRead, btnYourFavourites, btnWishlist, btnCurrentlyReading;
+    Button btnSeeAll, btnAlreadyRead, btnYourFavourites, btnWishlist, btnCurrentlyReading, btnAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +66,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        initiliaze data inside utils class
-        Utils.getInstance();
+        btnAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                builder.setMessage("Designed and Developed with Love by D'Riski Maulana\n" + "Check out my website for" +
+                        "more application.");
+                builder.setNegativeButton("Dissmiss", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                builder.setPositiveButton("Visit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent intent = new Intent(MainActivity.this, WebViewActivity.class);
+                        intent.putExtra("url", "https://google.com/");
+                        startActivity(intent);
+                    }
+                });
+
+                builder.create().show();
+            }
+        });
+
     }
 
 
@@ -75,5 +103,6 @@ public class MainActivity extends AppCompatActivity {
         btnYourFavourites = findViewById(R.id.btnYourFavourites);
         btnWishlist = findViewById(R.id.btnWishlist);
         btnCurrentlyReading = findViewById(R.id.btnCurrentlyReading);
+        btnAbout = findViewById(R.id.btnAbout);
     }
 }

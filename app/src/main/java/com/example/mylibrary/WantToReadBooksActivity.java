@@ -20,9 +20,9 @@ public class WantToReadBooksActivity extends AppCompatActivity {
         setContentView(R.layout.activity_want_to_read_books);
 
         recViewWantToRead = findViewById(R.id.recViewWantToRead);
-        adapter = new AllBooksRecViewAdapter(this);
+        adapter = new AllBooksRecViewAdapter(this, "wantToRead");
 
-        adapter.setBooks(Utils.getInstance().getWantToReadBooks());
+        adapter.setBooks(Utils.getInstance(this).getWantToReadBooks());
 
         recViewWantToRead.setAdapter(adapter);
         recViewWantToRead.setLayoutManager(new LinearLayoutManager(this));
